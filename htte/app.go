@@ -20,7 +20,7 @@ type Configs struct {
 
 type App struct {
 	Config Configs
-	routes []Route
+	Router Router
 }
 
 var ValidMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE"}
@@ -65,9 +65,10 @@ func (app *App) handleConnection(conn net.Conn) error {
 	}
 
 	var response string
-	route, exists := app.match(req.URL, req.Method)
 
-	if !exists {
+	handler := app.Router.match(req.URL, req.Method)
+
+	if handler == nil {
 		response = "HTTP/1.1 404 Not Found\r\n" +
 			"Content-Type: text/plain\r\n" +
 			"Content-Length: 10\r\n" +
@@ -80,7 +81,7 @@ func (app *App) handleConnection(conn net.Conn) error {
 			"\r\n" +
 			"Hello, World!\n"
 
-		route.Handler(req)
+		handler(req)
 	}
 
 	_, err := conn.Write([]byte(response))
@@ -116,7 +117,9 @@ func (app *App) Serve() error {
 }
 
 func New(config Configs) App {
-	var app = App{Config: config}
+	var router = Router{routes: []Route{}, config: RouterConfig{}}
+
+	var app = App{Config: config, Router: router}
 
 	return app
 }
