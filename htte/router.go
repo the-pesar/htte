@@ -21,26 +21,6 @@ func (router *Router) addRoute(method string, path string, handler HandlerFunc) 
 	router.routes = append(router.routes, route)
 }
 
-func (app *App) Get(path string, handler HandlerFunc) {
-	app.Router.addRoute("GET", path, handler)
-}
-
-func (app *App) Post(path string, handler HandlerFunc) {
-	app.Router.addRoute("Post", path, handler)
-}
-
-func (app *App) Put(path string, handler HandlerFunc) {
-	app.Router.addRoute("PUT", path, handler)
-}
-
-func (app *App) Patch(path string, handler HandlerFunc) {
-	app.Router.addRoute("PATCH", path, handler)
-}
-
-func (app *App) Delete(path string, handler HandlerFunc) {
-	app.Router.addRoute("DELETE", path, handler)
-}
-
 func (router *Router) match(path string, method string) HandlerFunc {
 	for _, v := range router.routes {
 		if path == v.Path {

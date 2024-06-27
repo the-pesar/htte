@@ -23,6 +23,26 @@ type App struct {
 	Router Router
 }
 
+func (app *App) Get(path string, handler HandlerFunc) {
+	app.Router.addRoute("GET", path, handler)
+}
+
+func (app *App) Post(path string, handler HandlerFunc) {
+	app.Router.addRoute("Post", path, handler)
+}
+
+func (app *App) Put(path string, handler HandlerFunc) {
+	app.Router.addRoute("PUT", path, handler)
+}
+
+func (app *App) Patch(path string, handler HandlerFunc) {
+	app.Router.addRoute("PATCH", path, handler)
+}
+
+func (app *App) Delete(path string, handler HandlerFunc) {
+	app.Router.addRoute("DELETE", path, handler)
+}
+
 var ValidMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE"}
 
 func (app *App) handleConnection(conn net.Conn) error {
