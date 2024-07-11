@@ -1,8 +1,8 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"flag"
 	"github.com/the-pesar/htte/htte"
 )
 

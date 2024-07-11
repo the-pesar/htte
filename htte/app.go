@@ -45,7 +45,7 @@ func (app *App) Delete(path string, handler HandlerFunc) {
 
 var ValidMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE"}
 
-func (app *App) handleConnection(conn net.Conn) error {
+func (app *App) handleConnection(conn Connection) error {
 	defer conn.Close()
 	reader := bufio.NewReader(conn)
 
@@ -114,18 +114,18 @@ func (app *App) handleConnection(conn net.Conn) error {
 }
 
 func (app *App) Serve() error {
-	server, err := net.Listen("tcp", fmt.Sprint(app.Config.Address, app.Config.Port))
+	scoket, err := NewSocket(net.ParseIP(app.Config.Address), app.Config.Port)
 
 	if err != nil {
 		return err
 	}
 
-	defer server.Close()
+	defer scoket.Close()
 
 	fmt.Println("Server started on port", app.Config.Port)
 
 	for {
-		conn, err := server.Accept()
+		conn, err := scoket.Accept()
 
 		if err != nil {
 			fmt.Println("Error accepting connection:", err)
